@@ -1,0 +1,6 @@
+/.idea/
+/coverage/
+/lib/
+/node_modules/
+/junit.xml
+/docs/operators/marbles/venv/
