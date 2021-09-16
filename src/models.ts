@@ -15,6 +15,7 @@ export type PatchRequestOptions<T> = RequestOptions<T, 'PATCH'>;
 export type DeleteRequestOptions = Omit<RequestOptions<any, 'DELETE'>, 'body'>;
 
 export interface Response<R = string> {
-  statusCode: number;
-  body: R;
+  statusCode?: number;
+  body: string;
+  json?: R;
 }
