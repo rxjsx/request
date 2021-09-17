@@ -47,14 +47,17 @@ function handleBuffer<R>(res: http.IncomingMessage, subscriber: Subscriber<Respo
   });
 }
 
-function createRequestBodyBuffer<T>(options: RequestOptions<T>): Buffer {
+function createRequestBodyBuffer<T, R>(
+  options: RequestOptions<T>,
+  subscriber: Subscriber<Response<R>>,
+): Buffer | undefined {
   if (typeof options.body === 'string') {
     return Buffer.from(options.body);
   }
   if (typeof options.body === 'object') {
     return Buffer.from(JSON.stringify(options.body));
   }
-  throw new Error('Unknown body type: only string and object supported');
+  subscriber.error(new Error('Unknown body type: only string and object supported'));
 }
 
 export function request<T, R>(options: RequestOptions<T>): Observable<Response<R>> {
@@ -66,7 +69,11 @@ export function request<T, R>(options: RequestOptions<T>): Observable<Response<R
     req.on('error', subscriber.error);
 
     if (options.body) {
-      const buffer = createRequestBodyBuffer(options);
+      const buffer = createRequestBodyBuffer(options, subscriber);
+      if (!buffer) {
+        req.end();
+        return;
+      }
       req.setHeader('content-length', buffer.length);
       req.end(buffer);
     } else {
