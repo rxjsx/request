@@ -1,6 +1,6 @@
 export type MethodType = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
-export interface RequestOptions<T = string, M extends MethodType = MethodType> {
+export interface RequestOptions<T = unknown, M extends MethodType = MethodType> {
   method: M;
   url: string;
   body?: T;
@@ -13,9 +13,15 @@ export type PostRequestOptions<T> = RequestOptions<T, 'POST'>;
 export type PatchRequestOptions<T> = RequestOptions<T, 'PATCH'>;
 export type DeleteRequestOptions = Omit<RequestOptions<unknown, 'DELETE'>, 'body'>;
 
-export class Response<R = string> {
+export class Response<R = unknown> {
+  private _json?: R;
   constructor(public body: string, public statusCode?: number) {}
   json(): R {
-    return JSON.parse(this.body);
+    if (this._json !== undefined) {
+      return this._json;
+    }
+    const parsed = JSON.parse(this.body);
+    this._json = parsed;
+    return parsed;
   }
 }
