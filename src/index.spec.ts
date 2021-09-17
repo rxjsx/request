@@ -98,4 +98,79 @@ describe('request', () => {
       done();
     });
   });
+
+  it('get', done => {
+    request
+      .get('https://httpbin.org/get')
+      .pipe(tap(res => expect(res.json()).toEqual(objectContaining({ url: 'https://httpbin.org/get' }))))
+      .subscribe(acceptOneCall('get'), fail, done);
+  });
+
+  it('post', done => {
+    request
+      .post('https://httpbin.org/post')
+      .pipe(tap(res => expect(res.json()).toEqual(objectContaining({ url: 'https://httpbin.org/post' }))))
+      .subscribe(acceptOneCall('post'), fail, done);
+  });
+
+  it('post with string body', done => {
+    request
+      .post('https://httpbin.org/post', '{ "accept": false }')
+      .pipe(tap(res => expect(res.json()).toEqual(objectContaining({ url: 'https://httpbin.org/post' }))))
+      .subscribe(acceptOneCall('post string'), fail, done);
+  });
+
+  it('post with JSON body', done => {
+    const body = { accept: false };
+    request
+      .post('https://httpbin.org/post', body)
+      .pipe(
+        tap(res => {
+          expect(res.statusCode).toEqual(200);
+          expect(res.json()).toEqual(objectContaining({ url: 'https://httpbin.org/post' }));
+          expect(res.json()).toEqual(objectContaining({ json: body }));
+        }),
+      )
+      .subscribe(acceptOneCall('post JSON'), fail, done);
+  });
+
+  it('put with JSON body', done => {
+    const body = { accept: false };
+    request
+      .put('https://httpbin.org/put', body)
+      .pipe(
+        tap(res => {
+          expect(res.statusCode).toEqual(200);
+          expect(res.json()).toEqual(objectContaining({ url: 'https://httpbin.org/put' }));
+          expect(res.json()).toEqual(objectContaining({ json: body }));
+        }),
+      )
+      .subscribe(acceptOneCall('put JSON'), fail, done);
+  });
+
+  it('patch with JSON body', done => {
+    const body = { accept: false };
+    request
+      .patch('https://httpbin.org/patch', body)
+      .pipe(
+        tap(res => {
+          expect(res.statusCode).toEqual(200);
+          expect(res.json()).toEqual(objectContaining({ url: 'https://httpbin.org/patch' }));
+          expect(res.json()).toEqual(objectContaining({ json: body }));
+        }),
+      )
+      .subscribe(acceptOneCall('patch JSON'), fail, done);
+  });
+
+  it('del', done => {
+    request
+      .del('https://httpbin.org/delete')
+      .pipe(
+        tap(res => {
+          expect(res.statusCode).toEqual(200);
+          expect(res.json()).toEqual(objectContaining({ url: 'https://httpbin.org/delete' }));
+        }),
+      )
+      .subscribe(acceptOneCall('del'), fail, done);
+  });
 });
