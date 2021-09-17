@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rm -rf lib && tsc",
     "junit": "jest --ci --reporters=default --reporters=jest-junit",
-    "test": "jest --coverage",
+    "test": "jest --coverage --detectOpenHandles",
     "lint": "eslint 'src/**/*.{js,ts,tsx}' --quiet --fix",
     "prepublish": "npm run build",
     "prepublishOnly": "npm test"
