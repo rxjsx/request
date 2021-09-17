@@ -4,7 +4,6 @@ import https from 'https';
 import { RequestOptions, Response } from './models';
 import { Observable, Subscriber } from 'rxjs';
 import { URL } from 'url';
-import { type } from 'os';
 
 function getProtocol(url: URL): typeof http | typeof https {
   if (url.protocol === 'http:') {
@@ -58,26 +57,13 @@ function handleBuffer<R>(res: http.IncomingMessage, subscriber: Subscriber<Respo
   });
 }
 
-function handleData<R>(res: http.IncomingMessage, subscriber: Subscriber<Response<R>>, acceptJson: boolean): void {
-  res.on('error', subscriber.error);
-  res.on('data', data => {
-    acceptResponse(data, res, acceptJson, subscriber);
-  });
-}
-
 export function request<T, R>(options: RequestOptions<T>): Observable<Response<R>> {
   const url = new URL(options.url);
   const httpOptions = createHttpOptions(options, url);
   const acceptJson = options.accept === 'json';
 
   return new Observable(subscriber => {
-    const req = getProtocol(url).request(httpOptions, res => {
-      if (options.method === 'GET') {
-        handleData(res, subscriber, acceptJson);
-      } else {
-        handleBuffer(res, subscriber, acceptJson);
-      }
-    });
+    const req = getProtocol(url).request(httpOptions, res => handleBuffer(res, subscriber, acceptJson));
     req.on('error', subscriber.error);
 
     if (options.body) {
@@ -93,7 +79,8 @@ export function request<T, R>(options: RequestOptions<T>): Observable<Response<R
         req.setHeader('content-length', buffer.length);
         req.end(buffer);
       }
+    } else {
+      req.end();
     }
-    req.end();
   });
 }
