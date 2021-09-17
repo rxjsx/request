@@ -1,7 +1,15 @@
 import http from 'http';
 import https from 'https';
 
-import { RequestOptions, Response } from './models';
+import {
+  DeleteRequestOptions,
+  GetRequestOptions,
+  PatchRequestOptions,
+  PostRequestOptions,
+  PutRequestOptions,
+  RequestOptions,
+  Response,
+} from './models';
 import { Observable, Subscriber } from 'rxjs';
 import { URL } from 'url';
 
@@ -80,4 +88,56 @@ export function request<T, R>(options: RequestOptions<T>): Observable<Response<R
       req.end();
     }
   });
+}
+
+/* istanbul ignore next */
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export namespace request {
+  export function get<R>(url: string, headers?: Record<string, string>): Observable<Response<R>> {
+    const options: GetRequestOptions = {
+      method: 'GET',
+      url,
+      headers,
+    };
+    return request(options);
+  }
+
+  export function post<T, R>(url: string, body?: T, headers?: Record<string, string>): Observable<Response<R>> {
+    const options: PostRequestOptions<T> = {
+      method: 'POST',
+      url,
+      body,
+      headers,
+    };
+    return request(options);
+  }
+
+  export function put<T, R>(url: string, body?: T, headers?: Record<string, string>): Observable<Response<R>> {
+    const options: PutRequestOptions<T> = {
+      method: 'PUT',
+      url,
+      body,
+      headers,
+    };
+    return request(options);
+  }
+
+  export function patch<T, R>(url: string, body?: T, headers?: Record<string, string>): Observable<Response<R>> {
+    const options: PatchRequestOptions<T> = {
+      method: 'PATCH',
+      url,
+      body,
+      headers,
+    };
+    return request(options);
+  }
+
+  export function del<R>(url: string, headers?: Record<string, string>): Observable<Response<R>> {
+    const options: DeleteRequestOptions = {
+      method: 'DELETE',
+      url,
+      headers,
+    };
+    return request(options);
+  }
 }
