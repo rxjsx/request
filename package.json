@@ -20,7 +20,8 @@
     "url": "git+https://github.com/rxjsx/request.git"
   },
   "keywords": [
-    "rxjs"
+    "rxjs",
+    "request"
   ],
   "author": "Mohammad-Ali A'RÂBI",
   "license": "MIT",
