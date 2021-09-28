@@ -8,8 +8,10 @@ A simple RxJS-based HTTP client
 
 ## Install
 ```bash
-npm install --save @rxjsx/request
+npm install --save @rxjsx/request rxjs
 ```
+
+The library RxJS is a peer dependency. The library is tested with RxJS v6 and v7.
 
 ## Usage
 
@@ -52,9 +54,5 @@ export declare namespace request {
 ```
 
 ## Notes
-- No peer dependency RxJS is required. One can instantly subscribe to the
-  request result and consume it or case it into a promise. For none of these cases
-  RxJS needs to be installed on the consumer's machine. One would need RxJS to
-  use transformations on the response (e.g. map, tap, filter, reduce, catch error).
 - The functions return a _singleton_ observable, meaning that the observable will
   contain one element (otherwise would error out).
