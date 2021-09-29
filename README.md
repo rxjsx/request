@@ -42,6 +42,27 @@ console.log(response.json());
 Try it here: https://runkit.com/aerabi/rxjsx-request-await
 
 ## API
+A name `request` is exported which is both a function and a namespace. One can call it directly
+by passing an object of type `RequestOptions`:
+
+```typescript
+const { request } = require("@rxjsx/request");
+
+request({ method: 'GET', path: 'https://httpbin.org/get' })
+  .subscribe(console.log);
+```
+
+Or one can use the member functions:
+
+```typescript
+const { request } = require("@rxjsx/request");
+
+request.get('https://httpbin.org/get')
+  .subscribe(console.log);
+```
+
+The full API is as follows:
+
 ```typescript
 export declare function request<T, R>(options: RequestOptions<T>): Observable<Response<R>>;
 export declare namespace request {
