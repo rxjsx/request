@@ -1,6 +1,6 @@
 {
   "name": "@rxjsx/request",
-  "version": "1.0.0-docs",
+  "version": "1.0.1",
   "description": "Simple Reactive HTTP Client",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
