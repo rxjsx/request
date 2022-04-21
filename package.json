@@ -45,6 +45,6 @@
     "typescript": "^4.2.4"
   },
   "peerDependencies": {
-    "rxjs": "^6.0.0"
+    "rxjs": "^6.0.0 || ^7.0.0"
   }
 }
